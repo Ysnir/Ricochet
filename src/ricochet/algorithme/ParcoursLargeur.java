@@ -12,6 +12,14 @@ import ricochet.utilitaire.Direction;
 
 public class ParcoursLargeur implements Resolution{
 
+	/**
+	 * Methode de resolution du parcours en largeur des etats.
+	 * Realise un parcours en largeur en sauvegardant les etats deja visite pour ne pas les revisiter a une profondeur de recherche plus importante.
+	 * Appel mouvementRobot pour connaitre chaque possibilite de deplacement des robots pour une configuration.
+	 * 
+	 * @return une liste de configuration de la configuration initiale a la configuration finale
+	 * @see ParcoursLargeur#mouvementRobot(Configuration)
+	 */
 	public ArrayList<Configuration> run() {
 
 		ArrayList<Configuration> visite = new ArrayList<Configuration>();
@@ -21,7 +29,7 @@ public class ParcoursLargeur implements Resolution{
 		boolean fini = false;
 		ArrayList<Configuration> path = new ArrayList<Configuration>();
 		
-		while(!fini && !fileConfig.isEmpty()) {
+		while(!fini && !fileConfig.isEmpty()) {//TODO puzzle insolvable condition de sortie de boucle
 			Configuration suivant = new Configuration(fileConfig.poll());
 			ArrayList<Configuration> aTraiter = new ArrayList<Configuration>(mouvementRobot(suivant));
 			for(Configuration e : aTraiter) {
@@ -43,6 +51,13 @@ public class ParcoursLargeur implements Resolution{
 		return path;
 	}
 	
+	/**
+	 * Genere une liste de configurations fille a partir d'une configuration en deplacant chaque robot dans toute les directions non-bouchee
+	 * Appel {@link ricochet.modele.Configuration#bougeJusqueObstacle(int[], Direction)} qui retourne la coordonnee d'un robot apres l'avoir deplace dans une direction
+	 * 
+	 * @param c configuration mere
+	 * @return liste de configuration filles
+	 */
 	public ArrayList<Configuration> mouvementRobot(Configuration c) {
 		ArrayList<Configuration> suivants = new ArrayList<Configuration>();
 		
