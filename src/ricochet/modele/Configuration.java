@@ -115,11 +115,12 @@ public class Configuration {
 			for(int j=0; j<xPlateau; j++) {
 				strPlateau = strPlateau + plateau[j][k].toString();
 			}
+			strPlateau = strPlateau + '\n';
 		}
 		
-		return "Configuration [xPlateau=" + xPlateau + ", yPlateau=" + yPlateau + ", positionRobots="
-				+ strPosRob + ", positionObjectif=" + Arrays.toString(positionObjectif)
-				+ ", plateau=" + strPlateau + ", profondeurRecherche=" + profondeurRecherche + "]";
+		return "Configuration {xPlateau=" + xPlateau + ", yPlateau=" + yPlateau + ", positionRobots="
+				+ strPosRob + ", positionObjectif=" + Arrays.toString(positionObjectif)+ ", profondeurRecherche=" + profondeurRecherche
+				+ ", plateau=\n" + strPlateau  + "}";
 	}
 	
 	@Override
