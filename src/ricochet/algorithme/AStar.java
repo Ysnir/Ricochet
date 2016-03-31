@@ -27,11 +27,9 @@ public class AStar implements Resolution {
 	}
 
 	private void propage(int[] coord, Direction mouvement, int generation) {
-		Case[][] plateauInitial = Modele.getInstance().getConfigInitiale().getPlateau();
-		
+		Case[][] plateauInitial = Modele.getInstance().getConfigInitiale().getPlateau();		
 		for(Direction dir : Direction.values()) {
 			if(plateauInitial[coord[0]][coord[1]].isDirection(dir)) {
-				
 				/*On cree une nouvelle coordonne pour la case vers laquelle on se dirige. 
 				 * Pour cela on recupere les coordonnees de la case courante que l'on modifie
 				 * on fonction de chaque directions vers lesquelles on se dirige.*/
@@ -43,22 +41,25 @@ public class AStar implements Resolution {
 				 *  vers la direction d'ou l'on proviendrait s'il on s'etait arrete sur cette case.
 				 *  (Si l'on longe une case avec un mur pendant la propagation on propage depuis cette case)
 				 */
-				if((mouvement == Direction.NORD) || (mouvement == Direction.SUD)) {
+				if(((mouvement == Direction.EST) || (mouvement == Direction.OUEST)) && (mouvement == dir)) {
 					if(plateauInitial[voisinCoord[0]][voisinCoord[1]].isNord() && !plateauInitial[voisinCoord[0]][voisinCoord[1]].isSud()) {
-						propage(voisinCoord, Direction.NORD, generation++);
+						int nouvelleGeneration = generation + 1;
+						propage(voisinCoord, Direction.NORD, nouvelleGeneration);
 					}
-					if(!plateauInitial[voisinCoord[0]][voisinCoord[1]].isNord() && plateauInitial[voisinCoord[0]][voisinCoord[1]].isSud()) {
-						propage(voisinCoord, Direction.SUD, generation++);
+					if(plateauInitial[voisinCoord[0]][voisinCoord[1]].isSud() && !plateauInitial[voisinCoord[0]][voisinCoord[1]].isNord()) {
+						int nouvelleGeneration = generation + 1;
+						propage(voisinCoord, Direction.SUD, nouvelleGeneration);
 					}
 				}
 				
-				//!\ Premieres conditions inversees ?
-				if((mouvement == Direction.EST) || (mouvement == Direction.OUEST)) {
+				if(((mouvement == Direction.NORD) || (mouvement == Direction.SUD)) && (mouvement == dir)) {
 					if(plateauInitial[voisinCoord[0]][voisinCoord[1]].isOuest() && !plateauInitial[voisinCoord[0]][voisinCoord[1]].isEst()) {
-						propage(voisinCoord, Direction.OUEST, generation++);
+						int nouvelleGeneration = generation + 1;
+						propage(voisinCoord, Direction.OUEST, nouvelleGeneration);
 					}
-					if(!plateauInitial[voisinCoord[0]][voisinCoord[1]].isOuest() && plateauInitial[voisinCoord[0]][voisinCoord[1]].isEst()) {
-						propage(voisinCoord, Direction.EST, generation++);
+					if(plateauInitial[voisinCoord[0]][voisinCoord[1]].isEst() && !plateauInitial[voisinCoord[0]][voisinCoord[1]].isOuest() ) {
+						int nouvelleGeneration = generation + 1;
+						propage(voisinCoord, Direction.EST, nouvelleGeneration);
 					}
 				}
 			}
@@ -74,5 +75,13 @@ public class AStar implements Resolution {
 			//on incremente pas generation car dans ce cas le robot n'a pas a changer de direction
 		}
 	}
+
+	public int[][] getCost() {
+		return cost;
+	}
+
+	public void setCost(int[][] cost) {
+		this.cost = cost;
+	}	
 	
 }

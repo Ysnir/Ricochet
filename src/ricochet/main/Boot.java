@@ -2,6 +2,7 @@ package ricochet.main;
 
 import java.util.ArrayList;
 
+import ricochet.algorithme.AStar;
 import ricochet.algorithme.Algorithme;
 import ricochet.algorithme.ParcoursLargeur;
 import ricochet.modele.Case;
@@ -12,9 +13,7 @@ import ricochet.vue.Vue;
 public class Boot {
 
 	public static void main(String[] args) {
-		Algorithme algo = new Algorithme(Modele.getInstance());
-		algo.setMethodeResolution(new ParcoursLargeur());
-		Vue v = new Vue(algo);
+
 		
 		//config test 1
 		int[][] posRobot = new int[1][2];
@@ -33,8 +32,22 @@ public class Boot {
 		murs[2][0] = new Case(false, true, false, true, false);
 		murs[2][1] = new Case(true, false, false, true, false);
 		murs[2][2] = new Case(false, false, false, true, true);
-		algo.genererConfig(3, 3, 1, posRobot, posObj, murs);
 		
+		Algorithme algo = new Algorithme(Modele.getInstance());
+		Vue v = new Vue(algo);
+		algo.genererConfig(3, 3, 1, posRobot, posObj, murs);
+		algo.setMethodeResolution(new AStar());
+		
+		((AStar)algo.getMethodeResolution()).couloirsHeuristique();
+		for(int i=0; i<3; i++){
+			for(int j=0; j<3; j++){
+				System.out.print(((AStar)algo.getMethodeResolution()).getCost()[j][i]);
+			}
+			System.out.println();
+		}
+		
+		//Affichage Parcours
+		/**
 		System.out.println(Modele.getInstance().getConfigInitiale().toString());
 		ArrayList<Configuration> path = new ArrayList<Configuration>();
 		path = algo.resoudre();
@@ -42,6 +55,7 @@ public class Boot {
 		for(int i=path.size()-1; i>=0; i--) {
 			System.out.println(path.get(i).toString());
 		}
+		*/
 		
 	}
 
