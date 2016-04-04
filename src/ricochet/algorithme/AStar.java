@@ -18,6 +18,12 @@ public class AStar implements Resolution {
 	}
 	
 	public void couloirsHeuristique() {
+		
+		//On rempli le cout avec -1 pour signifier -infini
+		for (int[] row: this.cost) {
+		    Arrays.fill(row, -1);
+		}
+
 		int[] coordObjectif = Arrays.copyOf(Modele.getInstance().getConfigInitiale().getPositionObjectif(), 2);
 		for(Direction dir : Direction.values()) {
 			if(Modele.getInstance().getConfigInitiale().getPlateau()[coordObjectif[0]][coordObjectif[1]].isDirection(dir)) {
@@ -29,9 +35,8 @@ public class AStar implements Resolution {
 	private void propage(int[] coord, Direction mouvement, int generation) {
 		Case[][] plateauInitial = Modele.getInstance().getConfigInitiale().getPlateau();
 		
-		//Lorsque la generation dépasse la plus grande dimension on arrete
-		if(generation < Math.max(Modele.getInstance().getConfigInitiale().getxPlateau(), Modele.getInstance().getConfigInitiale().getyPlateau())){
-			
+		//Lorsque la generation dépasse les dimensions du plateau on arrete
+		if(generation < (Modele.getInstance().getConfigInitiale().getxPlateau() * Modele.getInstance().getConfigInitiale().getyPlateau())){
 			//Pour chaque case accessible
 			for(Direction dir : Direction.values()) {
 				if(plateauInitial[coord[0]][coord[1]].isDirection(dir)) {
