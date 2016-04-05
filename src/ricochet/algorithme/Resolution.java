@@ -7,3 +7,4 @@ import ricochet.modele.Configuration;
 public interface Resolution {
 	ArrayList<Configuration> run();
 }
+

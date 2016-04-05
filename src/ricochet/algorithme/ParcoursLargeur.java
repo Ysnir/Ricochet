@@ -27,7 +27,7 @@ public class ParcoursLargeur implements Resolution{
 		visite.add(Modele.getInstance().getConfigInitiale());
 		fileConfig.add(Modele.getInstance().getConfigInitiale());
 		boolean fini = false;
-		ArrayList<Configuration> path = new ArrayList<Configuration>();
+		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
 		
 		while(!fini && !fileConfig.isEmpty()) {//TODO puzzle insolvable condition de sortie de boucle
 			Configuration suivant = new Configuration(fileConfig.poll());
@@ -42,13 +42,13 @@ public class ParcoursLargeur implements Resolution{
 
 			if(fini){
 				for(int i=suivant.getProfondeurRecherche(); i>0; i--) {
-					path.add(suivant);
+					chemin.add(suivant);
 					suivant = suivant.getPere();
 				}
 			}
 		}
 		
-		return path;
+		return chemin;
 	}
 	
 	/**

@@ -72,9 +72,17 @@ public class Configuration {
 		this.pere = c.getPere();
 	}
 	
-	public int[] bougeJusqueObstacle(int posRobot[], Direction sens) {
-		int xCase = posRobot[0];
-		int yCase = posRobot[1];
+	/**
+	 * Methode qui determine quelle sera la position finale d'un robot de coordonnees de depart donnees si on l'envoi dans une direction donnee
+	 * La fonction teste s'il y a des obstacle en condtion d'arret et s'appelle recursivement sur les case suivante que le robot parcours
+	 * 
+	 * @param coordRobot coordonnees de depart du robot
+	 * @param sens direction vers laquelle le robot se deplace
+	 * @return la coordonnee finale a laquelle le robot va s'arreter
+	 */
+	public int[] bougeJusqueObstacle(int coordRobot[], Direction sens) {
+		int xCase = coordRobot[0];
+		int yCase = coordRobot[1];
 		int[] nouvellePos = new int[2];
 
 		Case caseCour = this.getPlateau()[xCase][yCase];
@@ -85,7 +93,7 @@ public class Configuration {
 			return nouvellePos;
 			
 		} else {
-			Case caseSuiv = this.getPlateau()[posRobot[0] + sens.getMouvement()[0]][posRobot[1] + sens.getMouvement()[1]];
+			Case caseSuiv = this.getPlateau()[coordRobot[0] + sens.getMouvement()[0]][coordRobot[1] + sens.getMouvement()[1]];
 
 			if(caseSuiv.isRobot()) {
 				nouvellePos[0] = xCase;
@@ -93,8 +101,8 @@ public class Configuration {
 				return nouvellePos;
 			}
 			
-			nouvellePos[0] = posRobot[0] + sens.getMouvement()[0];
-			nouvellePos[1] = posRobot[1] + sens.getMouvement()[1];
+			nouvellePos[0] = coordRobot[0] + sens.getMouvement()[0];
+			nouvellePos[1] = coordRobot[1] + sens.getMouvement()[1];
 			
 			return bougeJusqueObstacle(nouvellePos, sens);
 		}

@@ -10,9 +10,39 @@ import ricochet.utilitaire.Direction;
 
 public class AStar implements Resolution {
 	
-	private int[][] cost = new int[Modele.getInstance().getConfigInitiale().getxPlateau()][Modele.getInstance().getConfigInitiale().getyPlateau()];
+	private int[][] coutHeuristique = new int[getInit().getxPlateau()][getInit().getyPlateau()];
 
 	public ArrayList<Configuration> run() {
+		ArrayList<int[]> dejaVu = new ArrayList<int[]>();
+		ArrayList<int[]> aExplorer = new ArrayList<int[]>();
+		aExplorer.add(Arrays.copyOf(Modele.getInstance().getConfigInitiale().getPositionObjectif(), 2));
+		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
+		int[][] coutAtteindre = new int[getInit().getxPlateau()][getInit().getyPlateau()];
+		int[][] coutTraverser = new int[getInit().getxPlateau()][getInit().getyPlateau()];
+		
+		for (int[] row: coutAtteindre) {
+		    Arrays.fill(row, -1);
+		}
+		//le cout pour aller du depart au depart vaut 0
+		coutAtteindre[getInit().getPositionRobots()[0][0]][getInit().getPositionRobots()[0][1]] = 0;
+		
+		for (int[] row: coutTraverser) {
+		    Arrays.fill(row, -1);
+		}
+		//On recupere la valeur approximee pour atteindre l'objectif depuis le depart
+		coutTraverser[getInit().getPositionRobots()[0][0]][getInit().getPositionRobots()[0][1]] = coutHeuristique[getInit().getPositionRobots()[0][0]][getInit().getPositionRobots()[0][1]];
+		
+		while(!aExplorer.isEmpty()){
+			int[] courant = Arrays.copyOf(this.minArray(aExplorer, coutTraverser), 2);
+			
+			if(Arrays.equals(courant, getInit().getPositionObjectif())) {
+				return chemin;
+			}
+			
+			aExplorer.remove(courant);
+			dejaVu.add(courant);
+			for
+		}
 		
 		return null;
 	}
@@ -20,7 +50,7 @@ public class AStar implements Resolution {
 	public void couloirsHeuristique() {
 		
 		//On rempli le cout avec -1 pour signifier -infini
-		for (int[] row: this.cost) {
+		for (int[] row: this.coutHeuristique) {
 		    Arrays.fill(row, -1);
 		}
 
@@ -77,7 +107,7 @@ public class AStar implements Resolution {
 			}
 			
 			//On continue la propagation dans la direction donnee
-			cost[coord[0]][coord[1]] = generation;
+			coutHeuristique[coord[0]][coord[1]] = generation;
 			if(plateauInitial[coord[0]][coord[1]].isDirection(mouvement)){
 				int[] suivantCoord = new int[2];
 				suivantCoord[0] = coord[0] + mouvement.getMouvement()[0];
@@ -87,13 +117,76 @@ public class AStar implements Resolution {
 			}
 		}
 	}
+	
+	/**
+	 * Methode pour simplifier l'acces a la configuration initiale
+	 * 
+	 * @return la configuration initiale
+	 * @see Modele#getInstance()
+	 */
+	public Configuration getInit() {
+		return Modele.getInstance().getConfigInitiale();
+	}
+	
+	/**
+	 * Methode permettant de recuperer l'item d'une liste avec le cout minimal
+	 * 
+	 * @param list La liste dans laquelle on cherche l'indice min
+	 * @param couts tableau de cout qui permet de determiner la valeur minimale
+	 * @return le couple de valeur avec le cout minimal
+	 */
+	public int[] minArray(ArrayList<int[]> list, int[][] couts) {
+		int coutMin = couts[list.get(0)[0]][list.get(0)[1]];
+		int[] noeudMin = Arrays.copyOf(list.get(0), 2);
+		for(int[] noeud : list) {
+			if(couts[noeud[0]][noeud[1]] < coutMin) {
+				noeudMin = Arrays.copyOf(noeud, 2);
+				coutMin = couts[noeud[0]][noeud[1]];
+			}
+		}
+		
+		return noeudMin;
+	}
+	
+	/**
+	 * 
+	 * @param noeud
+	 * @return
+	 */
+	public ArrayList<int[]> calculNoeudVoisins(int noeud[]) {
+		ArrayList<int[]> suivants = new ArrayList<int[]>();
+	
+			
+		for (Direction dir : Direction.values()) {
+				
+				int[] nouvellePosition = new int[2];
+				nouvellePosition = Arrays.copyOf(bougeJusqueObstacle(noeud, dir), 2);
+				
+				if(!Arrays.equals(nouvellePosition, c.getPositionRobots()[i])){
+					Configuration nouvelleConfig = new Configuration(c);
+
+					nouvelleConfig.getPositionRobots()[i] = nouvellePosition;
+					
+					nouvelleConfig.getPlateau()[nouvellePosition[0]][nouvellePosition[1]].setRobot(true);
+					
+					nouvelleConfig.getPlateau()[c.getPositionRobots()[i][0]][c.getPositionRobots()[i][1]].setRobot(false);
+					
+					nouvelleConfig.setProfondeurRecherche(c.getProfondeurRecherche()+1);
+					
+					nouvelleConfig.setPere(c);
+					
+					suivants.add(nouvelleConfig);
+				}
+		}
+		return suivants;
+	}
 
 	public int[][] getCost() {
-		return cost;
+		return coutHeuristique;
 	}
 
 	public void setCost(int[][] cost) {
-		this.cost = cost;
+		this.coutHeuristique = cost;
 	}	
 	
 }
