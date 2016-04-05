@@ -17,6 +17,8 @@ public class AStar implements Resolution {
 		ArrayList<int[]> aExplorer = new ArrayList<int[]>();
 		aExplorer.add(Arrays.copyOf(Modele.getInstance().getConfigInitiale().getPositionObjectif(), 2));
 		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
+		
+		//Le cout pour atteindre un noeud depuis le debut ainsi que celui pour atteindre l'objectif en passant par ce noeud
 		int[][] coutAtteindre = new int[getInit().getxPlateau()][getInit().getyPlateau()];
 		int[][] coutTraverser = new int[getInit().getxPlateau()][getInit().getyPlateau()];
 		
@@ -41,7 +43,24 @@ public class AStar implements Resolution {
 			
 			aExplorer.remove(courant);
 			dejaVu.add(courant);
-			for
+			
+			//On parcourt chaque voisin de courant
+			for(int[] voisin : calculNoeudVoisins(courant)) {
+				if(dejaVu.contains(voisin)) {
+					continue;
+				}
+				int raccourcis = coutAtteindre[courant[0]][courant[1]] + 1;
+				
+				if(!aExplorer.contains(voisin)) {
+					aExplorer.add(voisin);
+				} else if(raccourcis >= coutAtteindre[voisin[0]][voisin[1]]) {//Le nouveau chemin est pire que l'ancien
+					continue;
+				}
+				
+				chemin.add(configVierge(courant));
+				coutAtteindre[voisin[0]][voisin[1]] = raccourcis;
+				coutTraverser[voisin[0]][voisin[1]] = coutAtteindre[voisin[0]][voisin[1]] + coutHeuristique[voisin[0]][voisin[1]];
+			}
 		}
 		
 		return null;
@@ -149,36 +168,41 @@ public class AStar implements Resolution {
 	}
 	
 	/**
+	 * Methode qui retourne une liste de voisin que l'on peux atteindre avec le robot 0 a partir d'une coordonnee donnee
 	 * 
-	 * @param noeud
-	 * @return
+	 * @param noeud coordonnee du robot 0
+	 * @return toutes les coordonnees que l'on peut atteindre
 	 */
 	public ArrayList<int[]> calculNoeudVoisins(int noeud[]) {
 		ArrayList<int[]> suivants = new ArrayList<int[]>();
-	
+		Configuration noeudConfig = configVierge(noeud);
 			
 		for (Direction dir : Direction.values()) {
 				
 				int[] nouvellePosition = new int[2];
-				nouvellePosition = Arrays.copyOf(bougeJusqueObstacle(noeud, dir), 2);
+				nouvellePosition = Arrays.copyOf(noeudConfig.bougeJusqueObstacle(noeud, dir), 2);
 				
-				if(!Arrays.equals(nouvellePosition, c.getPositionRobots()[i])){
-					Configuration nouvelleConfig = new Configuration(c);
-
-					nouvelleConfig.getPositionRobots()[i] = nouvellePosition;
-					
-					nouvelleConfig.getPlateau()[nouvellePosition[0]][nouvellePosition[1]].setRobot(true);
-					
-					nouvelleConfig.getPlateau()[c.getPositionRobots()[i][0]][c.getPositionRobots()[i][1]].setRobot(false);
-					
-					nouvelleConfig.setProfondeurRecherche(c.getProfondeurRecherche()+1);
-					
-					nouvelleConfig.setPere(c);
-					
-					suivants.add(nouvelleConfig);
+				if(!Arrays.equals(nouvellePosition, noeud)){		
+					suivants.add(nouvellePosition);
 				}
 		}
 		return suivants;
+	}
+	
+	/**
+	 * Methode pour creer facilement une configuration a partir de la configuration de depart
+	 * en ne changant que les coordonnees du robot cible
+	 * 
+	 * @param noeud nouvelle coordonnees du robot cible
+	 * @return la configuration vierge
+	 */
+	public Configuration configVierge(int noeud[]) {
+		Configuration nouvelleConfig = new Configuration(getInit());
+		nouvelleConfig.getPlateau()[getInit().getPositionRobots()[0][0]][getInit().getPositionRobots()[0][0]].setRobot(false);
+		nouvelleConfig.getPlateau()[noeud[0]][noeud[1]].setRobot(true);
+		nouvelleConfig.getPositionRobots()[0] = noeud;
+		
+		return nouvelleConfig;
 	}
 
 	public int[][] getCost() {
