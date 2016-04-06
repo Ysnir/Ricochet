@@ -12,7 +12,7 @@ public class AStar implements Resolution {
 	
 	private int[][] coutHeuristique = new int[getInit().getxPlateau()][getInit().getyPlateau()];
 
-	public ArrayList<Configuration> run() {
+	public ArrayList<Configuration> lancer() {
 		ArrayList<int[]> dejaVu = new ArrayList<int[]>();
 		ArrayList<int[]> aExplorer = new ArrayList<int[]>();
 		aExplorer.add(Arrays.copyOf(Modele.getInstance().getConfigInitiale().getPositionObjectif(), 2));

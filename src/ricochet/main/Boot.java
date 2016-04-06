@@ -36,6 +36,9 @@ public class Boot {
 		Algorithme algo = new Algorithme(Modele.getInstance());
 		Vue v = new Vue(algo);
 		algo.genererConfig(3, 3, 1, posRobot, posObj, murs);
+		
+		//Affichage AStar
+		/**
 		algo.setMethodeResolution(new AStar());
 		
 		((AStar)algo.getMethodeResolution()).couloirsHeuristique();
@@ -44,18 +47,19 @@ public class Boot {
 				System.out.print(((AStar)algo.getMethodeResolution()).getCost()[j][i]);
 			}
 			System.out.println();
-		}
+		}*/
 		
-		//Affichage Parcours
-		/**
+		//Affichage Parcours Largeur
+		
+		algo.setMethodeResolution(new ParcoursLargeur());
 		System.out.println(Modele.getInstance().getConfigInitiale().toString());
-		ArrayList<Configuration> path = new ArrayList<Configuration>();
-		path = algo.resoudre();
-
-		for(int i=path.size()-1; i>=0; i--) {
-			System.out.println(path.get(i).toString());
+		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
+		algo.resoudre();
+		chemin = Modele.getInstance().getParcours();
+		
+		for(int i=chemin.size()-1; i>=0; i--) {
+			System.out.println(chemin.get(i).toString());
 		}
-		*/
 		
 	}
 

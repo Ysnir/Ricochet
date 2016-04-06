@@ -5,6 +5,6 @@ import java.util.ArrayList;
 import ricochet.modele.Configuration;
 
 public interface Resolution {
-	ArrayList<Configuration> run();
+	ArrayList<Configuration> lancer();
 }
 

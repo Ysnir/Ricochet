@@ -20,7 +20,7 @@ public class ParcoursLargeur implements Resolution{
 	 * @return une liste de configuration de la configuration initiale a la configuration finale
 	 * @see ParcoursLargeur#mouvementRobot(Configuration)
 	 */
-	public ArrayList<Configuration> run() {
+	public ArrayList<Configuration> lancer() {
 
 		ArrayList<Configuration> visite = new ArrayList<Configuration>();
 		Queue<Configuration> fileConfig = new LinkedList<Configuration>();

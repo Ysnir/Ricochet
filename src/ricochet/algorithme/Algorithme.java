@@ -63,8 +63,9 @@ public class Algorithme {
 	 * @see Resolution#run()
 	 * @return une liste de configuration reprenant le "chemin" des configuration jusqu'a l'arrive du robot 0 a l'objectif
 	 */
-	public ArrayList<Configuration> resoudre() {
-		return methodeResolution.run();
+	public void resoudre() {
+		this.modele.setParcours(methodeResolution.lancer());
+		
 	}
 	
 }
