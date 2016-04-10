@@ -2,6 +2,7 @@ package ricochet.algorithme;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import ricochet.modele.Case;
 import ricochet.modele.Configuration;
@@ -13,31 +14,34 @@ public class AStar implements Resolution {
 	private int[][] coutHeuristique = new int[getInit().getxPlateau()][getInit().getyPlateau()];
 
 	public ArrayList<Configuration> lancer() {
-		ArrayList<int[]> dejaVu = new ArrayList<int[]>();
-		ArrayList<int[]> aExplorer = new ArrayList<int[]>();
-		aExplorer.add(Arrays.copyOf(Modele.getInstance().getConfigInitiale().getPositionObjectif(), 2));
+		List<int[]> dejaVu = new ArrayList<int[]>();
+		List<int[]> aExplorer = new ArrayList<int[]>();
+		aExplorer.add(Arrays.copyOf(getInit().getPositionRobots()[0], 2));
 		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
+		this.couloirsHeuristique();
 		
 		//Le cout pour atteindre un noeud depuis le debut ainsi que celui pour atteindre l'objectif en passant par ce noeud
 		int[][] coutAtteindre = new int[getInit().getxPlateau()][getInit().getyPlateau()];
 		int[][] coutTraverser = new int[getInit().getxPlateau()][getInit().getyPlateau()];
 		
 		for (int[] row: coutAtteindre) {
-		    Arrays.fill(row, -1);
+		    Arrays.fill(row, Integer.MAX_VALUE);
 		}
 		//le cout pour aller du depart au depart vaut 0
 		coutAtteindre[getInit().getPositionRobots()[0][0]][getInit().getPositionRobots()[0][1]] = 0;
 		
 		for (int[] row: coutTraverser) {
-		    Arrays.fill(row, -1);
+		    Arrays.fill(row, Integer.MAX_VALUE);
 		}
 		//On recupere la valeur approximee pour atteindre l'objectif depuis le depart
 		coutTraverser[getInit().getPositionRobots()[0][0]][getInit().getPositionRobots()[0][1]] = coutHeuristique[getInit().getPositionRobots()[0][0]][getInit().getPositionRobots()[0][1]];
-		
+
 		while(!aExplorer.isEmpty()){
-			int[] courant = Arrays.copyOf(this.minArray(aExplorer, coutTraverser), 2);
+			
+			int[] courant = this.minArray(aExplorer, coutTraverser);
 			
 			if(Arrays.equals(courant, getInit().getPositionObjectif())) {
+				chemin.add(configVierge(courant));
 				return chemin;
 			}
 			
@@ -70,12 +74,12 @@ public class AStar implements Resolution {
 		
 		//On rempli le cout avec -1 pour signifier -infini
 		for (int[] row: this.coutHeuristique) {
-		    Arrays.fill(row, -1);
+		    Arrays.fill(row, Integer.MAX_VALUE);
 		}
 
-		int[] coordObjectif = Arrays.copyOf(Modele.getInstance().getConfigInitiale().getPositionObjectif(), 2);
+		int[] coordObjectif = Arrays.copyOf(getInit().getPositionObjectif(), 2);
 		for(Direction dir : Direction.values()) {
-			if(Modele.getInstance().getConfigInitiale().getPlateau()[coordObjectif[0]][coordObjectif[1]].isDirection(dir)) {
+			if(getInit().getPlateau()[coordObjectif[0]][coordObjectif[1]].isDirection(dir)) {
 				propage(coordObjectif, dir, 1);
 			}
 		}
@@ -148,18 +152,18 @@ public class AStar implements Resolution {
 	}
 	
 	/**
-	 * Methode permettant de recuperer l'item d'une liste avec le cout minimal
+	 * Methode permettant de recuperer la coordonnee d'une liste avec le cout minimal
 	 * 
-	 * @param list La liste dans laquelle on cherche l'indice min
-	 * @param couts tableau de cout qui permet de determiner la valeur minimale
+	 * @param liste La liste dans laquelle on cherche l'element de cout minimal
+	 * @param couts tableau de cout.
 	 * @return le couple de valeur avec le cout minimal
 	 */
-	public int[] minArray(ArrayList<int[]> list, int[][] couts) {
-		int coutMin = couts[list.get(0)[0]][list.get(0)[1]];
-		int[] noeudMin = Arrays.copyOf(list.get(0), 2);
-		for(int[] noeud : list) {
+	public int[] minArray(List<int[]> liste, int[][] couts) {
+		int[] noeudMin = liste.get(0);
+		int coutMin = couts[noeudMin[0]][noeudMin[1]];
+		for(int[] noeud : liste) {
 			if(couts[noeud[0]][noeud[1]] < coutMin) {
-				noeudMin = Arrays.copyOf(noeud, 2);
+				noeudMin = noeud;
 				coutMin = couts[noeud[0]][noeud[1]];
 			}
 		}
@@ -180,7 +184,7 @@ public class AStar implements Resolution {
 		for (Direction dir : Direction.values()) {
 				
 				int[] nouvellePosition = new int[2];
-				nouvellePosition = Arrays.copyOf(noeudConfig.bougeJusqueObstacle(noeud, dir), 2);
+				nouvellePosition = noeudConfig.bougeJusqueObstacle(noeud, dir);
 				
 				if(!Arrays.equals(nouvellePosition, noeud)){		
 					suivants.add(nouvellePosition);
@@ -201,7 +205,6 @@ public class AStar implements Resolution {
 		nouvelleConfig.getPlateau()[getInit().getPositionRobots()[0][0]][getInit().getPositionRobots()[0][0]].setRobot(false);
 		nouvelleConfig.getPlateau()[noeud[0]][noeud[1]].setRobot(true);
 		nouvelleConfig.getPositionRobots()[0] = noeud;
-		
 		return nouvelleConfig;
 	}
 

@@ -40,7 +40,6 @@ public class Boot {
 		//Affichage AStar
 		/**
 		algo.setMethodeResolution(new AStar());
-		
 		((AStar)algo.getMethodeResolution()).couloirsHeuristique();
 		for(int i=0; i<3; i++){
 			for(int j=0; j<3; j++){
@@ -51,8 +50,8 @@ public class Boot {
 		
 		//Affichage Parcours Largeur
 		
-		algo.setMethodeResolution(new ParcoursLargeur());
-		System.out.println(Modele.getInstance().getConfigInitiale().toString());
+		algo.setMethodeResolution(new AStar());
+		//System.out.println(Modele.getInstance().getConfigInitiale().toString());
 		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
 		algo.resoudre();
 		chemin = Modele.getInstance().getParcours();
