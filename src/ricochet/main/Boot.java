@@ -37,7 +37,7 @@ public class Boot {
 		Vue v = new Vue(algo);
 		algo.genererConfig(3, 3, 1, posRobot, posObj, murs);
 		
-		//Affichage AStar
+		//Affichage Heuristique des couloirs
 		/**
 		algo.setMethodeResolution(new AStar());
 		((AStar)algo.getMethodeResolution()).couloirsHeuristique();
@@ -48,14 +48,13 @@ public class Boot {
 			System.out.println();
 		}*/
 		
-		//Affichage Parcours Largeur
+		//Affichage parcours
 		
 		algo.setMethodeResolution(new AStar());
-		//System.out.println(Modele.getInstance().getConfigInitiale().toString());
 		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
 		algo.resoudre();
 		chemin = Modele.getInstance().getParcours();
-		
+
 		for(int i=chemin.size()-1; i>=0; i--) {
 			System.out.println(chemin.get(i).toString());
 		}

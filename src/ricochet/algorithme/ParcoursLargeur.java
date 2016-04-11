@@ -41,7 +41,7 @@ public class ParcoursLargeur implements Resolution{
 			fini = suivant.isFini();
 
 			if(fini){
-				for(int i=suivant.getProfondeurRecherche(); i>0; i--) {
+				for(int i=suivant.getProfondeurRecherche(); i>=0; i--) {
 					chemin.add(suivant);
 					suivant = suivant.getPere();
 				}

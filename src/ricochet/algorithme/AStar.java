@@ -2,6 +2,7 @@ package ricochet.algorithme;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import ricochet.modele.Case;
@@ -17,7 +18,7 @@ public class AStar implements Resolution {
 		List<int[]> dejaVu = new ArrayList<int[]>();
 		List<int[]> aExplorer = new ArrayList<int[]>();
 		aExplorer.add(Arrays.copyOf(getInit().getPositionRobots()[0], 2));
-		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
+		HashMap<int[], Configuration> vientDe = new HashMap();
 		this.couloirsHeuristique();
 		
 		//Le cout pour atteindre un noeud depuis le debut ainsi que celui pour atteindre l'objectif en passant par ce noeud
@@ -37,31 +38,35 @@ public class AStar implements Resolution {
 		coutTraverser[getInit().getPositionRobots()[0][0]][getInit().getPositionRobots()[0][1]] = coutHeuristique[getInit().getPositionRobots()[0][0]][getInit().getPositionRobots()[0][1]];
 
 		while(!aExplorer.isEmpty()){
+			/*System.out.print("{");
+			for(int[]i :dejaVu){
+				System.out.print(i[0]+"/"+i[1]+",");
+			}
+			System.out.println("}");*/
 			
-			int[] courant = this.minArray(aExplorer, coutTraverser);
+			int[] courant = minArray(aExplorer, coutTraverser);
 			
 			if(Arrays.equals(courant, getInit().getPositionObjectif())) {
-				chemin.add(configVierge(courant));
-				return chemin;
+				return reconstruireChemin(vientDe, courant);
 			}
 			
-			aExplorer.remove(courant);
+			removeArray(aExplorer, courant);
 			dejaVu.add(courant);
 			
 			//On parcourt chaque voisin de courant
 			for(int[] voisin : calculNoeudVoisins(courant)) {
-				if(dejaVu.contains(voisin)) {
+				if(containsArray(dejaVu, voisin)) {
 					continue;
 				}
 				int raccourcis = coutAtteindre[courant[0]][courant[1]] + 1;
 				
-				if(!aExplorer.contains(voisin)) {
+				if(!containsArray(aExplorer, voisin)) {
 					aExplorer.add(voisin);
 				} else if(raccourcis >= coutAtteindre[voisin[0]][voisin[1]]) {//Le nouveau chemin est pire que l'ancien
 					continue;
 				}
 				
-				chemin.add(configVierge(courant));
+				vientDe.put(voisin, configVierge(courant));
 				coutAtteindre[voisin[0]][voisin[1]] = raccourcis;
 				coutTraverser[voisin[0]][voisin[1]] = coutAtteindre[voisin[0]][voisin[1]] + coutHeuristique[voisin[0]][voisin[1]];
 			}
@@ -70,6 +75,18 @@ public class AStar implements Resolution {
 		return null;
 	}
 	
+	private ArrayList<Configuration> reconstruireChemin(HashMap<int[], Configuration> vientDe, int[] origine) {
+		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
+		chemin.add(configVierge(origine));
+		int[] courant = origine;
+		
+		while(vientDe.containsKey(courant)) {
+			courant = vientDe.get(courant).getPositionRobots()[0];
+			chemin.add(configVierge(courant));
+		}
+		return chemin;
+	}
+
 	public void couloirsHeuristique() {
 		
 		//On rempli le cout avec -1 pour signifier -infini
@@ -169,6 +186,40 @@ public class AStar implements Resolution {
 		}
 		
 		return noeudMin;
+	}
+	
+	/**
+	 * Methode qui permet de determiner si une coordonnee est presente dans une liste
+	 * 
+	 * @param liste liste a inspecter
+	 * @param array coordonnee que l'on recherche
+	 * @return un booleen
+	 */
+	public boolean containsArray(List<int[]> liste, int[] array){
+		boolean resultat = false;
+		for(int[] item : liste){
+			if((item[0] == array[0]) && (item[1] == array[1])) {
+				resultat = true;
+			}
+		}
+		
+		return resultat;
+	}
+	
+	/**
+	 * Methode qui permet de supprimer toute les occurence d'une coordonnee
+	 * 
+	 * @param liste liste 
+	 * @param array coordonnee à supprimer
+	 */
+	public void removeArray(List<int[]> liste, int[] array) {
+		List<int[]> copie = new ArrayList<int[]>(liste);
+		
+		for(int[] item : copie){
+			if((item[0] == array[0]) && (item[1] == array[1])) {
+				liste.remove(item);
+			}
+		}
 	}
 	
 	/**
