@@ -74,7 +74,7 @@ public class Configuration {
 	
 	/**
 	 * Methode qui determine quelle sera la position finale d'un robot de coordonnees de depart donnees si on l'envoi dans une direction donnee
-	 * La fonction teste s'il y a des obstacle en condtion d'arret et s'appelle recursivement sur les case suivante que le robot parcours
+	 * La fonction teste s'il y a des obstacle en condition d'arret et s'appelle recursivement sur les case suivante que le robot parcours
 	 * 
 	 * @param coordRobot coordonnees de depart du robot
 	 * @param sens direction vers laquelle le robot se deplace

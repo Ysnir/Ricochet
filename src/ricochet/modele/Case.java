@@ -60,7 +60,23 @@ public class Case {
 			case OUEST :
 				return this.isOuest();
 			default :
-				//TODO exception
+				System.err.println("Direction inexistante");
+				return false;
+		} 
+	}
+	
+	public boolean isAccessible(Direction dir) {
+		switch (dir) {
+			case NORD :
+				return this.isNord() && !this.isRobot();
+			case SUD :
+				return this.isSud() && !this.isRobot();
+			case EST :
+				return this.isEst() && !this.isRobot();
+			case OUEST :
+				return this.isOuest() && !this.isRobot();
+			default :
+				System.err.println("Direction inexistante");
 				return false;
 		} 
 	}

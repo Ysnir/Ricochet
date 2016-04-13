@@ -29,7 +29,7 @@ public class ParcoursLargeur implements Resolution{
 		boolean fini = false;
 		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
 		
-		while(!fini && !fileConfig.isEmpty()) {//TODO puzzle insolvable condition de sortie de boucle
+		while(!fini && !fileConfig.isEmpty()) {
 			Configuration suivant = new Configuration(fileConfig.poll());
 			ArrayList<Configuration> aTraiter = new ArrayList<Configuration>(mouvementRobot(suivant));
 			for(Configuration e : aTraiter) {

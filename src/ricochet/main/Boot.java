@@ -16,9 +16,11 @@ public class Boot {
 
 		
 		//config test 1
-		int[][] posRobot = new int[1][2];
+		int[][] posRobot = new int[2][2];
 		posRobot[0][0] = 2;
 		posRobot[0][1] = 2;
+		posRobot[1][0] = 1;
+		posRobot[1][1] = 1;
 		int[] posObj = new int[2];
 		posObj[0] = 0;
 		posObj[1] = 0;
@@ -27,7 +29,7 @@ public class Boot {
 		murs[0][1] = new Case(false, true, true, false, false);
 		murs[0][2] = new Case(true, false, false, false, false);
 		murs[1][0] = new Case(false, true, true, true, false);
-		murs[1][1] = new Case(true, true, true, true, false);
+		murs[1][1] = new Case(true, true, true, true, true);
 		murs[1][2] = new Case(true, false, true, false, false);
 		murs[2][0] = new Case(false, true, false, true, false);
 		murs[2][1] = new Case(true, false, false, true, false);
@@ -40,15 +42,15 @@ public class Boot {
 		//Affichage Heuristique des couloirs
 		/**
 		algo.setMethodeResolution(new AStar());
-		((AStar)algo.getMethodeResolution()).couloirsHeuristique();
+		int[][] coutHeuristique = ((AStar)algo.getMethodeResolution()).couloirsHeuristique(Modele.getInstance().getConfigInitiale());
 		for(int i=0; i<3; i++){
 			for(int j=0; j<3; j++){
-				System.out.print(((AStar)algo.getMethodeResolution()).getCost()[j][i]);
+				System.out.print(coutHeuristique[j][i] + " ");
 			}
 			System.out.println();
 		}*/
 		
-		//Affichage parcours
+		//Affichage parcours		
 		
 		algo.setMethodeResolution(new AStar());
 		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
