@@ -51,7 +51,7 @@ public class Vue implements Observateur{
 			}
 		}
 		
-		algo.genererConfig(x, y, nbRobot, posRobot, posObj, murs);
+		algo.genererConfig(x, y, posRobot, posObj, murs);
 	}
 
 	public void actualise() {

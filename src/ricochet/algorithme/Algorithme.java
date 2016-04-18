@@ -51,8 +51,8 @@ public class Algorithme {
 	 * @param posObj coordonnee de l'objectif
 	 * @param murs tableau contenant les "murs" du plateau
 	 */
-	public void genererConfig(int x, int y, int nbRobot, int[][] posRobot, int[] posObj, Case[][] murs) {
-		modele.setConfigInitiale(new Configuration(x, y, nbRobot, posRobot, posObj, murs));
+	public void genererConfig(int x, int y, int[][] posRobot, int[] posObj, Case[][] murs) {
+		modele.setConfigInitiale(new Configuration(x, y, posRobot, posObj, murs));
 	}
 	
 	/**

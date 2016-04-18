@@ -8,6 +8,7 @@ import ricochet.algorithme.ParcoursLargeur;
 import ricochet.modele.Case;
 import ricochet.modele.Configuration;
 import ricochet.modele.Modele;
+import ricochet.utilitaire.Direction;
 import ricochet.vue.Vue;
 
 public class Boot {
@@ -19,8 +20,6 @@ public class Boot {
 		int[][] posRobot = new int[2][2];
 		posRobot[0][0] = 2;
 		posRobot[0][1] = 2;
-		posRobot[1][0] = 1;
-		posRobot[1][1] = 1;
 		int[] posObj = new int[2];
 		posObj[0] = 0;
 		posObj[1] = 0;
@@ -29,7 +28,7 @@ public class Boot {
 		murs[0][1] = new Case(false, true, true, false, false);
 		murs[0][2] = new Case(true, false, false, false, false);
 		murs[1][0] = new Case(false, true, true, true, false);
-		murs[1][1] = new Case(true, true, true, true, true);
+		murs[1][1] = new Case(true, true, true, true, false);
 		murs[1][2] = new Case(true, false, true, false, false);
 		murs[2][0] = new Case(false, true, false, true, false);
 		murs[2][1] = new Case(true, false, false, true, false);
@@ -37,10 +36,11 @@ public class Boot {
 		
 		Algorithme algo = new Algorithme(Modele.getInstance());
 		Vue v = new Vue(algo);
-		algo.genererConfig(3, 3, 1, posRobot, posObj, murs);
+		algo.genererConfig(3, 3, posRobot, posObj, murs);
 		
 		//Affichage Heuristique des couloirs
 		/**
+		System.out.println(Modele.getInstance().getConfigInitiale());
 		algo.setMethodeResolution(new AStar());
 		int[][] coutHeuristique = ((AStar)algo.getMethodeResolution()).couloirsHeuristique(Modele.getInstance().getConfigInitiale());
 		for(int i=0; i<3; i++){
@@ -49,10 +49,9 @@ public class Boot {
 			}
 			System.out.println();
 		}*/
-		
+
 		//Affichage parcours		
-		
-		algo.setMethodeResolution(new AStar());
+		algo.setMethodeResolution(new ParcoursLargeur());
 		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
 		algo.resoudre();
 		chemin = Modele.getInstance().getParcours();
