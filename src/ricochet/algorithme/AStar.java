@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ricochet.modele.Case;
 import ricochet.modele.Configuration;
@@ -21,55 +22,44 @@ public class AStar implements Resolution {
 		int[][] coutHeuristique = couloirsHeuristique(getInit());
 		int[] robotCible = getInit().getPositionRobots()[0];
 		
-		if(coutHeuristique[robotCible[0]][robotCible[1]] == Integer.MAX_VALUE) {
+		while(coutHeuristique[robotCible[0]][robotCible[1]] == Integer.MAX_VALUE) {
 			Configuration configMin = new Configuration(getInit());
 			int[][] coutMin = new int[getInit().getxPlateau()][getInit().getyPlateau()];
-			coutMin[robotCible[0]][robotCible[1]] = Integer.MAX_VALUE;
+			for (int[] row: coutMin) {
+			    Arrays.fill(row, Integer.MAX_VALUE);
+			}
 			int[] nouvellePosition, anciennePosition = new int[2];
 			int[][] coutCourant = new int[getInit().getxPlateau()][getInit().getyPlateau()];
 			
 			for(int i=1; i<getInit().getPositionRobots().length; i++) {
 				for(Direction dir : Direction.values()) {
 					Configuration config = new Configuration(getInit());
+					
 					nouvellePosition = config.bougeJusqueObstacle(config.getPositionRobots()[i], dir);
 					anciennePosition = config.getPositionRobots()[i];
-					config.getPositionRobots()[i] = nouvellePosition;
-					
-					config.getPlateau()[nouvellePosition[0]][nouvellePosition[1]].setRobot(true);				
-					config.getPlateau()[anciennePosition[0]][anciennePosition[1]].setRobot(false);
-					
-					
-					coutCourant = couloirsHeuristique(config);
-					
-					/*System.out.println(config);
-					
-					for(int k=0; k<3; k++){
-						for(int j=0; j<3; j++){
-							System.out.print(coutCourant[j][k] + " ");
-						}
-						System.out.println();
+					if(!Arrays.equals(nouvellePosition, anciennePosition)) {
+						config.getPositionRobots()[i] = nouvellePosition;
+						
+						
+							config.getPlateau()[nouvellePosition[0]][nouvellePosition[1]].setRobot(true);				
+							config.getPlateau()[anciennePosition[0]][anciennePosition[1]].setRobot(false);
+						
+						
+						coutCourant = couloirsHeuristique(config);
+						
+						if(coutTotal(coutMin) > coutTotal(coutCourant) || coutMin[robotCible[0]][robotCible[1]] > coutCourant[robotCible[0]][robotCible[1]]) {
+							coutMin = coutCourant;
+							configMin = config;
+						}	
 					}
-					System.out.println();*/
-					if(coutMin[robotCible[0]][robotCible[1]] > coutCourant[robotCible[0]][robotCible[1]]) {
-						coutMin = coutCourant;
-						configMin = config;
-					}					
 				}
 			}
-
 			coutHeuristique = coutMin;
 			Configuration ancienneConfig = new Configuration(getInit());
 			getInit().setPositionRobots(configMin.getPositionRobots());
 			getInit().setPlateau(configMin.getPlateau());
 
 			vientDe.put(getInit(), ancienneConfig);
-			
-			/*for(int k=0; k<3; k++){
-				for(int j=0; j<3; j++){
-					System.out.print(coutMin[j][k] + " ");
-				}
-				System.out.println();
-			}*/
 		}
 		
 		//Le cout pour atteindre un noeud depuis le debut ainsi que celui pour atteindre l'objectif en passant par ce noeud
@@ -92,6 +82,9 @@ public class AStar implements Resolution {
 			int[] courant = minArray(aExplorer, coutTraverser);
 			
 			if(Arrays.equals(courant, getInit().getPositionObjectif())) {
+				/*for(Map.Entry<Configuration, Configuration> entry : vientDe.entrySet()) {
+					System.out.println("clef : "+entry.getKey()+"\nvaleur : "+entry.getValue());
+				}*/
 				return reconstruireChemin(vientDe, configVierge(0, courant));
 			}
 			
@@ -312,6 +305,16 @@ public class AStar implements Resolution {
 				liste.remove(item);
 			}
 		}
+	}
+	
+	public long coutTotal(int[][] tableau) {
+		long resultat = 0;
+		for(int[] ligne : tableau) {
+			for(int cellule : ligne) {
+				resultat = resultat + cellule;
+			}
+		}
+		return resultat;
 	}
 	
 }

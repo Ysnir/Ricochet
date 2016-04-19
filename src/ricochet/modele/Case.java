@@ -102,6 +102,40 @@ public class Case {
 		
 		return res + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (est ? 1231 : 1237);
+		result = prime * result + (nord ? 1231 : 1237);
+		result = prime * result + (ouest ? 1231 : 1237);
+		result = prime * result + (robot ? 1231 : 1237);
+		result = prime * result + (sud ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Case other = (Case) obj;
+		if (est != other.est)
+			return false;
+		if (nord != other.nord)
+			return false;
+		if (ouest != other.ouest)
+			return false;
+		if (robot != other.robot)
+			return false;
+		if (sud != other.sud)
+			return false;
+		return true;
+	}
 	
 	
 	

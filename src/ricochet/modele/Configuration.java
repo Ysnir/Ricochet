@@ -132,21 +132,42 @@ public class Configuration {
 	}
 	
 	@Override
-	public boolean equals(Object o) {
-		
-	    if (o == this) {
-	    	return true;
-	    }
-	    
-	    if (!(o instanceof Configuration)) {
-	    	return false;
-	    }
-	    
-	    Configuration c = (Configuration) o;
-	    
-	    return c.xPlateau == this.xPlateau && c.yPlateau == this.yPlateau && Arrays.deepEquals(c.positionRobots, this.positionRobots) 
-	    		&& Arrays.equals(c.positionObjectif, this.positionObjectif) && Arrays.deepEquals(c.plateau, this.plateau) 
-	    		&& c.profondeurRecherche == this.profondeurRecherche;
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.deepHashCode(plateau);
+		result = prime * result + Arrays.deepHashCode(positionRobots);
+
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Configuration other = (Configuration) obj;
+		if (pere == null) {
+			if (other.pere != null)
+				return false;
+		} else if (!pere.equals(other.pere))
+			return false;
+		if (!Arrays.deepEquals(plateau, other.plateau))
+			return false;
+		if (!Arrays.equals(positionObjectif, other.positionObjectif))
+			return false;
+		if (!Arrays.deepEquals(positionRobots, other.positionRobots))
+			return false;
+		if (profondeurRecherche != other.profondeurRecherche)
+			return false;
+		if (xPlateau != other.xPlateau)
+			return false;
+		if (yPlateau != other.yPlateau)
+			return false;
+		return true;
 	}
 
 	public int getxPlateau() {
