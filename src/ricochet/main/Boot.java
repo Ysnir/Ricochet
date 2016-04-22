@@ -4,11 +4,9 @@ import java.util.ArrayList;
 
 import ricochet.algorithme.AStar;
 import ricochet.algorithme.Algorithme;
-import ricochet.algorithme.ParcoursLargeur;
 import ricochet.modele.Case;
 import ricochet.modele.Configuration;
 import ricochet.modele.Modele;
-import ricochet.utilitaire.Direction;
 import ricochet.vue.Vue;
 
 public class Boot {
@@ -21,11 +19,12 @@ public class Boot {
 		posRobot[0][0] = 2;
 		posRobot[0][1] = 2;
 		posRobot[1][0] = 1;
-		posRobot[1][1] = 1;
+		posRobot[1][1] = 0;
 		posRobot[2][0] = 1;
-		posRobot[2][1] = 0;
+		posRobot[2][1] = 1;
 		posRobot[3][0] = 2;
 		posRobot[3][1] = 1;
+
 		int[] posObj = new int[2];
 		posObj[0] = 0;
 		posObj[1] = 0;
@@ -56,7 +55,8 @@ public class Boot {
 			System.out.println();
 		}*/
 
-		//Affichage parcours		
+		//Affichage parcours
+		/**
 		algo.setMethodeResolution(new AStar());
 		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
 		algo.resoudre();
@@ -65,6 +65,9 @@ public class Boot {
 		for(int i=chemin.size()-1; i>=0; i--) {
 			System.out.println(chemin.get(i).toString());
 		}
+		System.out.println(Modele.getInstance().getConfigInitiale());
+		*/
+		
 		
 	}
 

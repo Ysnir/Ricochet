@@ -40,7 +40,7 @@ public class Configuration {
 		this.positionObjectif = posObj;
 		this.plateau = murs;
 		this.profondeurRecherche = 0;
-		this.pere = this;
+		this.pere = null;
 		
 	}
 	

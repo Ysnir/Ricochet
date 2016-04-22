@@ -1,16 +1,25 @@
 package ricochet.vue;
 
+import java.awt.GridLayout;
 import java.util.Scanner;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import ricochet.algorithme.Algorithme;
 import ricochet.modele.Case;
 
-public class Vue implements Observateur{
+public class Vue  extends JFrame implements Observateur{
 	
 	protected Algorithme algo;
+	protected ImageIcon[][] images;
+	protected JLabel[][] labels;
 	
 	public Vue(Algorithme algo) {
 		this.algo = algo;
+		
+		setLayout(new GridLayout());
 	}
 	
 	public void scanConfig() {

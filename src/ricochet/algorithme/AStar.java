@@ -18,6 +18,7 @@ public class AStar implements Resolution {
 		List<int[]> aExplorer = new ArrayList<int[]>();
 		aExplorer.add(getInit().getPositionRobots()[0]);
 		HashMap<Configuration, Configuration> vientDe = new HashMap();
+		Configuration sauvegardeInitiale = new Configuration(getInit());
 		
 		int[][] coutHeuristique = couloirsHeuristique(getInit());
 		int[] robotCible = getInit().getPositionRobots()[0];
@@ -56,10 +57,14 @@ public class AStar implements Resolution {
 			}
 			coutHeuristique = coutMin;
 			Configuration ancienneConfig = new Configuration(getInit());
+			
+			
 			getInit().setPositionRobots(configMin.getPositionRobots());
 			getInit().setPlateau(configMin.getPlateau());
-
-			vientDe.put(getInit(), ancienneConfig);
+			
+			Configuration nouvelleConfig = new Configuration(getInit());
+			
+			vientDe.put(nouvelleConfig, ancienneConfig);
 		}
 		
 		//Le cout pour atteindre un noeud depuis le debut ainsi que celui pour atteindre l'objectif en passant par ce noeud
@@ -85,7 +90,8 @@ public class AStar implements Resolution {
 				/*for(Map.Entry<Configuration, Configuration> entry : vientDe.entrySet()) {
 					System.out.println("clef : "+entry.getKey()+"\nvaleur : "+entry.getValue());
 				}*/
-				return reconstruireChemin(vientDe, configVierge(0, courant));
+
+				return reconstruireChemin(vientDe, configVierge(0, courant), sauvegardeInitiale);
 			}
 			
 			removeArray(aExplorer, courant);
@@ -121,7 +127,7 @@ public class AStar implements Resolution {
 	 * @param origine debut du parcours
 	 * @return
 	 */
-	private ArrayList<Configuration> reconstruireChemin(HashMap<Configuration, Configuration> vientDe, Configuration origine) {
+	private ArrayList<Configuration> reconstruireChemin(HashMap<Configuration, Configuration> vientDe, Configuration origine, Configuration sauvegardeInitiale) {
 		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
 		chemin.add(origine);
 		Configuration courant = origine;
@@ -130,6 +136,8 @@ public class AStar implements Resolution {
 			courant = vientDe.get(courant);
 			chemin.add(courant);
 		}
+		getInit().setPositionRobots(sauvegardeInitiale.getPositionRobots());
+		getInit().setPlateau(sauvegardeInitiale.getPlateau());
 		return chemin;
 	}
 
