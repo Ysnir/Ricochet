@@ -2,8 +2,10 @@ package ricochet.main;
 
 import java.util.ArrayList;
 
-import ricochet.algorithme.AStar;
+import javax.swing.JFrame;
+
 import ricochet.algorithme.Algorithme;
+import ricochet.algorithme.IDDFS;
 import ricochet.modele.Case;
 import ricochet.modele.Configuration;
 import ricochet.modele.Modele;
@@ -40,9 +42,10 @@ public class Boot {
 		murs[2][2] = new Case(false, false, false, true, true);
 		
 		Algorithme algo = new Algorithme(Modele.getInstance());
-		Vue v = new Vue(algo);
 		algo.genererConfig(3, 3, posRobot, posObj, murs);
+		Vue v = new Vue(algo);
 		
+
 		//Affichage Heuristique des couloirs
 		/**
 		System.out.println(Modele.getInstance().getConfigInitiale());
@@ -56,17 +59,16 @@ public class Boot {
 		}*/
 
 		//Affichage parcours
-		/**
-		algo.setMethodeResolution(new AStar());
+		algo.setMethodeResolution(new IDDFS());
 		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
 		algo.resoudre();
-		chemin = Modele.getInstance().getParcours();
-
-		for(int i=chemin.size()-1; i>=0; i--) {
-			System.out.println(chemin.get(i).toString());
-		}
-		System.out.println(Modele.getInstance().getConfigInitiale());
-		*/
+		
+		v.dessineParcours();
+		
+		v.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		v.setVisible(true);
+		v.pack();
+		v.setTitle("Ricochet Robot");
 		
 		
 	}
