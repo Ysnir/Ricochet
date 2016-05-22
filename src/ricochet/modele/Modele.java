@@ -10,9 +10,10 @@ public class Modele {
 	private List<Observateur> observateurs = new ArrayList<Observateur>();
 	private Configuration configInitiale;
 	private ArrayList<Configuration> parcours;
+	private double tempsExec;
 	private static Modele instance = null;
 	
-	//On remplace le constructeur par défaut public par un constructeur privé pour garantir qu'il n'y ai qu'une seul instance de Modele
+	//On remplace le constructeur par défaut public par un constructeur privé pour garantir qu'il n'y ait qu'une seule instance de Modele
 	private Modele() {
 		super();
 	}
@@ -58,5 +59,13 @@ public class Modele {
 
 	public void setParcours(ArrayList<Configuration> parcours) {
 		this.parcours = parcours;
+	}
+
+	public double getTempsExec() {
+		return tempsExec;
+	}
+
+	public void setTempsExec(double tempsExec) {
+		this.tempsExec = tempsExec;
 	}
 }

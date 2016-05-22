@@ -17,7 +17,7 @@ public class AStar implements Resolution {
 		List<int[]> dejaVu = new ArrayList<int[]>();
 		List<int[]> aExplorer = new ArrayList<int[]>();
 		aExplorer.add(getInit().getPositionRobots()[0]);
-		HashMap<Configuration, Configuration> vientDe = new HashMap();
+		HashMap<Configuration, Configuration> vientDe = new HashMap<Configuration, Configuration>();
 		Configuration sauvegardeInitiale = new Configuration(getInit());
 		
 		int[][] coutHeuristique = couloirsHeuristique(getInit());
@@ -87,10 +87,6 @@ public class AStar implements Resolution {
 			int[] courant = minArray(aExplorer, coutTraverser);
 			
 			if(Arrays.equals(courant, getInit().getPositionObjectif())) {
-				/*for(Map.Entry<Configuration, Configuration> entry : vientDe.entrySet()) {
-					System.out.println("clef : "+entry.getKey()+"\nvaleur : "+entry.getValue());
-				}*/
-
 				return reconstruireChemin(vientDe, configVierge(0, courant), sauvegardeInitiale);
 			}
 			
@@ -109,8 +105,6 @@ public class AStar implements Resolution {
 				} else if(raccourcis >= coutAtteindre[voisin[0]][voisin[1]]) {//Le nouveau chemin est pire que l'ancien
 					continue;
 				}
-				/*System.out.println("cour : "+configVierge(0,courant));
-				System.out.println("vois : "+configVierge(0,voisin));*/
 				vientDe.put(configVierge(0,voisin), configVierge(0, courant));
 				coutAtteindre[voisin[0]][voisin[1]] = raccourcis;
 				coutTraverser[voisin[0]][voisin[1]] = coutAtteindre[voisin[0]][voisin[1]] + coutHeuristique[voisin[0]][voisin[1]];

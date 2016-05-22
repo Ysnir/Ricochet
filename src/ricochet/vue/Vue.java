@@ -1,7 +1,6 @@
 package ricochet.vue;
 
 import java.awt.ComponentOrientation;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
@@ -10,10 +9,12 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import ricochet.algorithme.Algorithme;
 import ricochet.modele.Case;
@@ -29,18 +30,17 @@ public class Vue extends JFrame implements Observateur{
 	public Vue(Algorithme algo) {
 		this.algo = algo;
 		this.labels = new JLabel[getInit().getxPlateau()][getInit().getyPlateau()];
-		
 	}
 	
 	public JPanel dessineConfiguration(Configuration c) {
 		JPanel p = new JPanel();
-		setResizable(false);
 		p.setLayout(new GridLayout(c.getxPlateau(),c.getyPlateau(), 0, 0));
 		p.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		for(int i=0; i<c.getxPlateau(); i++) {
 			for(int j=0; j<c.getyPlateau(); j++) {
 				BufferedImage buff;
 				BufferedImage robot;
+				BufferedImage objectif;
 				try {
 					
 					String path = new String("images/");
@@ -59,6 +59,11 @@ public class Vue extends JFrame implements Observateur{
 					path = path +".png";
 	
 					buff = ImageIO.read(new File(path));
+					if(c.getPositionObjectif()[0] == j && c.getPositionObjectif()[1] == i) {
+						objectif = ImageIO.read(new File("images/objectif.png"));
+						Graphics g = buff.getGraphics();
+						g.drawImage(objectif, 5, 5, null);
+					}
 					for(int k=0; k<c.getPositionRobots().length; k++) {
 						if(c.getPositionRobots()[k][0] == j && c.getPositionRobots()[k][1] == i) {
 							robot = ImageIO.read(new File("images/"+k+".png"));
@@ -82,13 +87,17 @@ public class Vue extends JFrame implements Observateur{
 	}
 	
 	public void dessineParcours() {
+		JPanel boite = new JPanel();
+		boite.setLayout(new BoxLayout(boite, BoxLayout.Y_AXIS));
+		JScrollPane defilement = new JScrollPane(boite, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
 		JPanel p;
-		setResizable(false);
-		setLayout(new FlowLayout());
 		for(int i=Modele.getInstance().getParcours().size()-1;i>=0; i--) {
 			p = this.dessineConfiguration(Modele.getInstance().getParcours().get(i));
-			add(p);
+			boite.add(p);
 		}
+		add(defilement);
+		setSize(getInit().getxPlateau()*63+26, getInit().getyPlateau()*63+30);
+		setResizable(false);
 	}
 	
 	public void scanConfig() {

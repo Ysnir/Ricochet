@@ -22,9 +22,7 @@ public class ParcoursLargeur implements Resolution{
 	 */
 	public ArrayList<Configuration> lancer() {
 
-		ArrayList<Configuration> visite = new ArrayList<Configuration>();
 		Queue<Configuration> fileConfig = new LinkedList<Configuration>();
-		visite.add(Modele.getInstance().getConfigInitiale());
 		fileConfig.add(Modele.getInstance().getConfigInitiale());
 		boolean fini = false;
 		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
@@ -33,10 +31,7 @@ public class ParcoursLargeur implements Resolution{
 			Configuration suivant = new Configuration(fileConfig.poll());
 			ArrayList<Configuration> aTraiter = new ArrayList<Configuration>(mouvementRobot(suivant));
 			for(Configuration e : aTraiter) {
-				if(!visite.contains(e)) {
-					visite.add(e);
 					fileConfig.add(e);
-				}
 			}
 			fini = suivant.isFini();
 

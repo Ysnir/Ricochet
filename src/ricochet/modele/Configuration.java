@@ -33,13 +33,13 @@ public class Configuration {
 	 * @param posRob position des robots
 	 * @param posObj position de l'objectif
 	 */
-	public Configuration(int x, int y, int[][] posRob, int[] posObj, Case[][] murs) {
+	public Configuration(int x, int y, int[][] posRob, int[] posObj, Case[][] murs, int prof) {
 		this.xPlateau = x;
 		this.yPlateau = y;
 		this.positionRobots = posRob;
 		this.positionObjectif = posObj;
 		this.plateau = murs;
-		this.profondeurRecherche = 0;
+		this.profondeurRecherche = prof;
 		this.pere = null;
 		
 	}

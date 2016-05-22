@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import ricochet.algorithme.AStar;
 import ricochet.algorithme.Algorithme;
 import ricochet.algorithme.IDDFS;
+import ricochet.algorithme.ParcoursLargeur;
 import ricochet.modele.Case;
 import ricochet.modele.Configuration;
 import ricochet.modele.Modele;
@@ -42,34 +44,26 @@ public class Boot {
 		murs[2][2] = new Case(false, false, false, true, true);
 		
 		Algorithme algo = new Algorithme(Modele.getInstance());
-		algo.genererConfig(3, 3, posRobot, posObj, murs);
-		Vue v = new Vue(algo);
-		
+		//algo.genererConfig(3, 3, posRobot, posObj, murs);
+		algo.genererConfigAleatoire256();
+		//algo.genererConfigAleatoire25();
 
-		//Affichage Heuristique des couloirs
-		/**
-		System.out.println(Modele.getInstance().getConfigInitiale());
-		algo.setMethodeResolution(new AStar());
-		int[][] coutHeuristique = ((AStar)algo.getMethodeResolution()).couloirsHeuristique(Modele.getInstance().getConfigInitiale());
-		for(int i=0; i<3; i++){
-			for(int j=0; j<3; j++){
-				System.out.print(coutHeuristique[j][i] + " ");
-			}
-			System.out.println();
-		}*/
+		
 
 		//Affichage parcours
+		
 		algo.setMethodeResolution(new IDDFS());
-		ArrayList<Configuration> chemin = new ArrayList<Configuration>();
+
+		
+		Vue v = new Vue(algo);
 		algo.resoudre();
-		
+		System.out.println(Modele.getInstance().getTempsExec());
+		System.out.println(Modele.getInstance().getParcours().size() - 1);
 		v.dessineParcours();
-		
-		v.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		v.setVisible(true);
-		v.pack();
-		v.setTitle("Ricochet Robot");
-		
+		v.setTitle("Robot Ricochet");
+		v.setResizable(false);
+		v.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
 

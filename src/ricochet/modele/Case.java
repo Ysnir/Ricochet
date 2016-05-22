@@ -88,6 +88,22 @@ public class Case {
 		ouest = o;
 	}
 
+	public void setNord(boolean nord) {
+		this.nord = nord;
+	}
+
+	public void setSud(boolean sud) {
+		this.sud = sud;
+	}
+
+	public void setEst(boolean est) {
+		this.est = est;
+	}
+
+	public void setOuest(boolean ouest) {
+		this.ouest = ouest;
+	}
+
 	public void setRobot(boolean robot) {
 		this.robot = robot;
 	}

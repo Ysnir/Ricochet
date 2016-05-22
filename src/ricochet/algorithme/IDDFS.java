@@ -12,7 +12,7 @@ public class IDDFS implements Resolution{
 	ArrayList<Configuration> chemin = new ArrayList<Configuration>();
 	
 	public ArrayList<Configuration> lancer() {
-		for(int profondeur = 0; profondeur < 600; profondeur++) { //600 ?
+		for(int profondeur = 0; profondeur < Integer.MAX_VALUE; profondeur++) {
 			configCourante = parcoursProfondeurRecursif(Modele.getInstance().getConfigInitiale(), profondeur);
 			if(configCourante != null) {
 				for(int i=configCourante.getProfondeurRecherche(); i>=0; i--) {
